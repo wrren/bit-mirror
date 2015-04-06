@@ -36,6 +36,8 @@
     <Compile Include="BitMirror.cs" />
     <Compile Include="FileSystem\MirrorDirectory.cs" />
     <Compile Include="FileSystem\File.cs" />
+    <Compile Include="FileSystem\Diff.cs" />
+    <Compile Include="FileSystem\Chunk.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

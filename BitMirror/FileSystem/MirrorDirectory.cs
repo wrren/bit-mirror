@@ -51,7 +51,7 @@ namespace BitMirror
 			mWatcher 		= new FileSystemWatcher( path );
 
 			mWatcher.Changed 	+= new FileSystemEventHandler( OnFileChanged );
-			mWatcher.Renamed 	+= new FileSystemEventHandler( OnFileMoved );
+			mWatcher.Renamed 	+= new RenamedEventHandler( OnFileMoved );
 			mWatcher.Deleted 	+= new FileSystemEventHandler( OnFileDeleted );
 		}
 
@@ -78,9 +78,9 @@ namespace BitMirror
 			var fileList 		= Directory.GetFiles( path );
 			var directoryList 	= Directory.GetDirectories( path );
 
-			Task[] tasks = new Task[directoryList.GetLength()];
+			Task[] tasks = new Task[directoryList.Length];
 
-			for( int i = 0; i < directoryList.GetLength(); i++ ) 
+			for( int i = 0; i < directoryList.Length; i++ ) 
 			{
 				tasks[i] = new Task( () => FullScan( directoryList[i], files ) );
 			}
@@ -94,6 +94,8 @@ namespace BitMirror
 
 				files[file].Scan();
 			}
+
+			Task.WaitAll( tasks );
 		}
 
 		private void OnFileChanged( object src, FileSystemEventArgs e )
@@ -101,7 +103,7 @@ namespace BitMirror
 
 		}
 
-		private void OnFileMoved( object src, FileSystemEventArgs e )
+		private void OnFileMoved( object src, RenamedEventArgs e )
 		{
 
 		}
