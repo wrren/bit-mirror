@@ -10,6 +10,11 @@ namespace BitMirror
 	public class Chunk
 	{
 		/// <summary>
+		/// Ideal Chunk Size
+		/// </summary>
+		public const int TargetSize = 16194;
+
+		/// <summary>
 		/// Parent File
 		/// </summary>
 		private File mFile;
@@ -17,12 +22,28 @@ namespace BitMirror
 		/// <summary>
 		/// Offset, in bytes, into the file where this chunk begins
 		/// </summary>
-		private int mOffset;
+		private long mOffset;
+
+		/// <summary>
+		/// Get the offset, in bytes, into the file where this chunk begins
+		/// </summary>
+		public long Offset
+		{
+			get { return mOffset; }
+		}
 
 		/// <summary>
 		/// Length, in bytes, of this chunk
 		/// </summary>
-		private int mLength;
+		private long mLength;
+
+		/// <summary>
+		/// Get the length of this Chunk in bytes
+		/// </summary>
+		public long Length
+		{
+			get { return mLength; }
+		}
 
 		/// <summary>
 		/// Chunk Signature
@@ -47,7 +68,7 @@ namespace BitMirror
 		/// Construct a chunk as a child of the given parent file
 		/// </summary>
 		/// <param name="file">Parent File</param>
-		public Chunk( File file, int offset, int length )
+		public Chunk( File file, long offset, long length )
 		{
 			mFile 	= file;
 			mOffset = offset;
@@ -55,14 +76,24 @@ namespace BitMirror
 		}
 
 		/// <summary>
-		/// Generate the signature for this chunk from the given file stream
+		/// Generate a new signature for this chunk from the given file stream and compare it to the
+		/// stored chunk signature. If the two signatures are not equal, returns false to indicate 
+		/// no match, otherwise returns true.
 		/// </summary>
 		/// <param name="stream">File Stream</param>
-		public void GenerateSignature( FileStream stream )
+		public bool GenerateSignature( FileStream stream )
 		{
 			byte[] data = new byte[mLength];
-			stream.Read( data, mOffset, mLength );
-			mSignature = mHasher.ComputeHash( data );
+			stream.Read( data, ( int ) mOffset, ( int ) mLength );
+
+			byte[] signature = mHasher.ComputeHash( data );
+
+			if( signature != mSignature )
+			{
+				return false;
+			}
+
+			return true;
 		}
 
 		/// <summary>
@@ -71,14 +102,26 @@ namespace BitMirror
 		/// <param name="other">The <see cref="BitMirror.Chunk"/> to compare with the current <see cref="BitMirror.Chunk"/>.</param>
 		/// <returns><c>true</c> if the specified <see cref="BitMirror.Chunk"/> is equal to the current <see cref="BitMirror.Chunk"/>;
 		/// otherwise, <c>false</c>.</returns>
-		public override bool Equals( Chunk other )
+		public bool Equals( Chunk other )
 		{
 			if( other == null )
 			{
 				return false;
-			};
+			}
 				
 			return other.mLength == mLength && other.mOffset == mOffset && other.mSignature.Equals( mSignature );
+		}
+
+		public override bool Equals( object obj )
+		{
+			Chunk other = obj as Chunk;
+
+			if( other != null )
+			{
+				return Equals( other );
+			}
+
+			return base.Equals( obj );
 		}
 	}
 }

@@ -10,6 +10,16 @@ namespace BitMirror
 	public class Diff
 	{
 		/// <summary>
+		/// Possible types of file differences.
+		/// </summary>
+		public enum Type
+		{
+			ContentModification,	// Content was modified
+			Movement,		// File was moved
+			Deletion		// File was deleted
+		}
+
+		/// <summary>
 		/// File Current/Previous Path
 		/// </summary>
 		private string mPath;
@@ -20,7 +30,10 @@ namespace BitMirror
 		/// </summary>
 		private string mNewPath;
 
-
+		/// <summary>
+		/// File Diff Type
+		/// </summary>
+		private Type mType;
 
 		public Diff()
 		{

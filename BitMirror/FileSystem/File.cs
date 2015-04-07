@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace BitMirror
 {
@@ -33,9 +34,36 @@ namespace BitMirror
 		/// <summary>
 		/// Scan the File's current contents for changes.
 		/// </summary>
-		public void Scan()
+		public List<Chunk> Scan()
 		{
+			FileStream stream = System.IO.File.OpenRead( mPath );
+			
+			long offset = 0;
 
+			List<Chunk> changes = new List<Chunk>();
+
+			foreach( Chunk chunk in mChunks )
+			{
+				if( chunk.GenerateSignature( stream ) == false )
+				{
+					changes.Add( chunk );
+				}
+
+				offset += chunk.Length;
+			}
+			
+			return changes;
+		}
+
+		/// <summary>
+		/// Apply the given file diff to this file. This may result in the file being moved
+		/// to a new location, in which case the returned string will reflect this.
+		/// </summary>
+		/// <param name="diff">File difference to be applied to this file</param>
+		/// <returns>New file path or null if the file was deleted</returns>
+		public string Apply( Diff diff )
+		{
+			return null;
 		}
 	}
 }
