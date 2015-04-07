@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace BitMirror
 {
@@ -13,6 +14,11 @@ namespace BitMirror
 		/// Path to this file
 		/// </summary>
 		private string mPath;
+
+		/// <summary>
+		/// File Chunks
+		/// </summary>
+		private List<Chunk> mChunks = new List<Chunk>();
 
 		/// <summary>
 		/// Construct a File instance that points to the file at the specified path

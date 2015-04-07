@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.0</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{DA5FA6B9-7FB8-4106-8CBF-3E931B593EAC}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -38,9 +38,12 @@
     <Compile Include="FileSystem\File.cs" />
     <Compile Include="FileSystem\Diff.cs" />
     <Compile Include="FileSystem\Chunk.cs" />
+    <Compile Include="Utilities\IntHelpers.cs" />
+    <Compile Include="Utilities\Murmur3.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="FileSystem\" />
+    <Folder Include="Utilities\" />
   </ItemGroup>
 </Project>
